@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Task Management Dashboard</title>
+</head>
+
+<body>
+
+    <h1>Dashboard</h1>
+
+    <!-- Top Navigation -->
+    <table border="1" width="100%">
+        <tr>
+            <td width="15%">Dashboard</td>
+            <td width="10%">Tasks</td>
+            <td width="10%">Messages</td>
+            <td width="10%">Settings</td>
+            <td align="right">Search: <input type="text"></td>
+        </tr>
+    </table>
+
+    <br>
+
+    <!-- Main Layout -->
+    <table border="1" width="100%" cellpadding="10">
+
+        <tr>
+
+            <!-- LEFT MENU -->
+            <td width="20%" valign="top">
+
+                <h3>Menu</h3>
+
+                <ul>
+                    <li>Overview</li>
+                    <li>My Tasks</li>
+                    <li>Completed</li>
+                </ul>
+
+            </td>
+
+
+            <!-- CENTER CONTENT -->
+            <td width="60%" valign="top">
+
+                <h3>Task Summary</h3>
+
+                <table border="1" width="100%">
+                    <tr>
+                        <th>Total Tasks</th>
+                        <th>Completed</th>
+                        <th>In Progress</th>
+                        <th>Pending</th>
+                        <th>Overdue</th>
+                    </tr>
+
+                    <tr>
+                        <td align="center">42</td>
+                        <td align="center">24</td>
+                        <td align="center">12</td>
+                        <td align="center">3</td>
+                        <td align="center">3</td>
+                    </tr>
+                </table>
+
+                <br>
+
+                <h3>Task Overview</h3>
+
+                <form>
+                    <input type="checkbox"> Completed <br>
+                    <input type="checkbox"> In Progress <br>
+                    <input type="checkbox"> Overdue
+                </form>
+
+                <br>
+
+                <h3>Upcoming Tasks</h3>
+
+                <ul>
+                    <li>Prepare presentation (Due Jan 16)</li>
+                    <li>Review code (Due Jan 20)</li>
+                    <li>Team meeting (Due Jan 23)</li>
+                </ul>
+
+                <br>
+
+                <h3>File Upload</h3>
+
+                <input type="file"><br><br>
+                <input type="submit" value="Upload">
+
+            </td>
+
+
+            <!-- RIGHT SIDEBAR -->
+            <td width="20%" valign="top">
+
+                <h3>Team Members</h3>
+
+                <ul>
+                    <li>Lisa – Online</li>
+                    <li>Tom – 20 mins ago</li>
+                    <li>Kevin – Jan 17</li>
+                </ul>
+
+                <br>
+
+                <h3>Activity Feed</h3>
+
+                <ol>
+                    <li>Dave updated the project</li>
+                    <li>New task "Design Banner" added</li>
+                    <li>Mark completed "Edit Video"</li>
+                </ol>
+
+                <br>
+
+                <h3>Progress</h3>
+
+                Project Completion
+
+                <br><br>
+
+                <progress value="70" max="100"></progress>
+
+                <br>
+                70%
+
+            </td>
+
+        </tr>
+
+    </table>
+
+</body>
+
+</html>

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="text-center mb-5">
+  <h1 class="fw-bold">Rural Government Scheme Eligibility Engine</h1>
+  <p class="text-muted">
+    Find out which government schemes you qualify for based on your personal
+    details.
+  </p>
+</div>
+
+<h2 class="mb-4">Check Scheme Eligibility</h2>
+
+<div class="card p-4 shadow-lg">
+  <form method="POST">
+    {% csrf_token %}
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Annual Income</label>
+        {{ form.income }}
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Age</label>
+        {{ form.age }}
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Gender</label>
+      {{ form.gender }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">State</label>
+      {{ form.state }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Occupation</label>
+      {{ form.occupation }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Land Ownership</label>
+      {{ form.land_ownership }}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Disability Status</label>
+      {{ form.disability_status }}
+    </div>
+
+    <button class="btn btn-primary w-100">Check Eligibility</button>
+  </form>
+</div>
+
+{% if results %}
+<div class="mt-5">
+  <h4>Evaluation Results</h4>
+
+  <ul class="list-group">
+    {% for result in results %}
+
+    <li class="list-group-item">
+      <a href="{% url 'scheme_detail' result.scheme.id %}">
+        {{ result.scheme.name }}
+      </a>
+
+      {% if result.is_eligible %}
+      <span class="badge bg-success">Eligible</span>
+      {% else %}
+      <span class="badge bg-danger">Not Eligible</span>
+      {% endif %}
+
+      <ul class="mt-2">
+        {% for rule in result.rules %}
+        <li>
+
+          {{ rule.field_name|title }}
+
+          {% if rule.operator == "eq" %}
+          must be
+          {% elif rule.operator == "lte" %}
+          must be ≤
+          {% elif rule.operator == "gte" %}
+          must be ≥
+          {% elif rule.operator == "lt" %}
+          must be <
+          {% elif rule.operator == "gt" %}
+          must be >
+          {% elif rule.operator == "in" %}
+          must be one of
+          {% endif %}
+
+          {{ rule.value }}
+
+          {% if rule.passed %}
+          <span class="badge bg-success">Passed</span>
+          {% else %}
+          <span class="badge bg-danger">Failed</span>
+          {% endif %}
+
+        </li>
+        {% endfor %}
+      </ul>
+    </li>
+
+    {% endfor %}
+  </ul>
+</div>
+
+<div class="mt-4">
+  <a href="{% url 'download_report' %}" class="btn btn-success">
+    Download Eligibility Report (PDF)
+  </a>
+</div>
+{% endif %}
+
+{% endblock %}
