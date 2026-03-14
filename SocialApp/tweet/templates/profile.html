@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h2>{{ profile_user.username }}</h2>
+
+<h5>User Tweets</h5>
+
+{% for tweet in tweets %}
+
+<div class="card mb-3">
+  <div class="card-body">
+
+    <p>{{ tweet.text }}</p>
+
+    {% if tweet.photo %}
+      <img src="{{ tweet.photo.url }}" width="300">
+    {% endif %}
+
+  </div>
+</div>
+
+{% empty %}
+
+<p>No tweets yet.</p>
+
+{% endfor %}
+
+{% endblock %}

@@ -1,22 +1,39 @@
 {% extends "layout.html" %}
-{% block title %}
-tweets
-{% endblock  %}
 
 {% block content %}
-<h1 class="text-center mt-4">Welcome to django project</h1>
-<h2>{% if form.instace.pk %}
-    Edit Tweet
-    {% else %}
-    Create Tweet
-    {% endif %}
-    <form method="POST" enctype = "multipart/form-data" class="form">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-warning">Submit</button>
-    </form>
-    <a href="{% url 'tweet_list' %}">Back to tweet list</a>
-</h2>
 
+<div class="row justify-content-center mt-5">
+<div class="col-md-6">
 
-{%endblock%}
+<div class="card shadow-sm p-4">
+
+<h4 class="mb-4">Create Tweet</h4>
+
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+
+<div class="mb-3">
+<label class="form-label">Text</label>
+{{ form.text }}
+</div>
+
+<div class="mb-3">
+<label class="form-label">Photo</label>
+{{ form.photo }}
+</div>
+
+<button type="submit" class="btn btn-primary">
+Post Tweet
+</button>
+
+<a href="{% url 'tweet_list' %}" class="btn btn-secondary ms-2">
+Cancel
+</a>
+
+</form>
+
+</div>
+</div>
+</div>
+
+{% endblock %}

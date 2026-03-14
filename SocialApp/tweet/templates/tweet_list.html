@@ -1,22 +1,176 @@
-{% extends "layout.html" %} {% block title %} tweets {% endblock %}
+{% extends "layout.html" %}
+
+{% block title %} tweets {% endblock %}
+
 {% block content %}
+
 <h1 class="text-center mt-4">Welcome to django project</h1>
-<a class="btn btn-primary" href="{% url 'tweet_create' %}">Create a tweet</a>
-<div class="container row gap=3">
-  {% for tweet in tweets %}
-  <div class="card" style="width: 18rem">
-    <img src="{{tweet.photo.url}}" class="card-img-top" alt="..." />
-    <div class="card-body">
-      <h5 class="card-title">{{tweet.user.username}}</h5>
-      <p class="card-text">
-        {{tweet.text}}
-      </p>
-      {% if tweet.user == user %}
-      <a href="{% url 'tweet_edit' tweet.id %}" class="btn btn-primary">Edit</a>
-      <a href="{% url 'tweet_delete' tweet.id %}" class="btn btn-danger ">Delete</a>
-      {% endif %}
-    </div>
-  </div>
-  {% endfor %}
+
+<div class="text-center">
+<a class="btn btn-primary mb-4" href="{% url 'tweet_create' %}">
+Create a tweet
+</a>
 </div>
-{%endblock%}
+
+<div class="container">
+
+<div class="row justify-content-center">
+<div class="col-md-6">
+
+{% for tweet in page_obj %}
+
+<div class="card shadow-sm mb-4">
+
+{% if tweet.photo %}
+<img
+src="{{ tweet.photo.url }}"
+class="card-img-top img-fluid"
+style="max-height:400px; object-fit:cover;"
+alt="tweet image"
+
+>
+
+{% endif %}
+
+<div class="card-body">
+
+<h6 class="fw-bold mb-1">
+<a href="{% url 'profile' tweet.user.username %}" class="text-decoration-none">
+{{ tweet.user.username }}
+</a>
+</h6>
+
+<p class="text-muted small">
+{{ tweet.created_at }}
+</p>
+
+<p class="card-text">
+{{ tweet.text }}
+</p>
+
+<div class="d-flex justify-content-between align-items-center mt-3">
+
+<div class="d-flex align-items-center gap-3">
+
+<button 
+class="btn btn-sm btn-outline-danger like-btn"
+data-id="{{ tweet.id }}">
+❤️ Like </button>
+
+<span class="text-muted">
+❤️ <span id="likes-{{ tweet.id }}">{{ tweet.total_likes }}</span>
+</span>
+
+<span class="text-muted">
+💬 {{ tweet.total_comments }}
+</span>
+
+</div>
+
+</div>
+
+<hr>
+
+<h6>Comments</h6>
+
+{% for comment in tweet.comments.all %}
+
+<div class="border rounded p-2 mb-2">
+
+<strong>{{ comment.user.username }}</strong>
+
+<p class="mb-1">
+{{ comment.text }}
+</p>
+
+{% if comment.user == user %} <a href="{% url 'delete_comment' comment.id %}" class="btn btn-sm btn-danger">
+Delete </a>
+{% endif %}
+
+</div>
+{% empty %}
+<p class="text-muted">No comments yet</p>
+{% endfor %}
+
+<form method="POST" action="{% url 'add_comment' tweet.id %}">
+{% csrf_token %}
+
+<input
+type="text"
+name="text"
+placeholder="Write a comment..."
+class="form-control mb-2"
+
+>
+
+<button type="submit" class="btn btn-sm btn-primary">
+Comment
+</button>
+
+</form>
+
+{% if tweet.user == user %}
+
+<div class="mt-3">
+
+<a href="{% url 'tweet_edit' tweet.id %}" class="btn btn-sm btn-primary">
+Edit
+</a>
+
+<a href="{% url 'tweet_delete' tweet.id %}" class="btn btn-sm btn-danger">
+Delete
+</a>
+
+</div>
+{% endif %}
+
+</div>
+</div>
+
+{% endfor %}
+
+</div>
+</div>
+
+</div>
+
+<div class="container text-center mt-4">
+
+{% if page_obj.has_previous %} <a class="btn btn-outline-primary" href="?page=1">First</a> <a class="btn btn-outline-primary" href="?page={{ page_obj.previous_page_number }}">
+Previous </a>
+{% endif %}
+
+<span class="mx-3">
+Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+</span>
+
+{% if page_obj.has_next %} <a class="btn btn-outline-primary" href="?page={{ page_obj.next_page_number }}">
+Next </a> <a class="btn btn-outline-primary" href="?page={{ page_obj.paginator.num_pages }}">
+Last </a>
+{% endif %}
+
+</div>
+
+<script>
+
+document.querySelectorAll(".like-btn").forEach(button => {
+
+button.addEventListener("click", function(){
+
+const tweetId = this.dataset.id;
+
+fetch(`/tweet/${tweetId}/like/`)
+.then(response => response.json())
+.then(data => {
+
+document.getElementById(`likes-${tweetId}`).innerText = data.total_likes;
+
+});
+
+});
+
+});
+
+</script>
+
+{% endblock %}
